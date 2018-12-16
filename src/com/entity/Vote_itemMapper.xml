@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.entity.Vote_itemMapper" >
+  <resultMap id="BaseResultMap" type="com.entity.Vote_item" >
+    <id column="VI_ID" property="viId" jdbcType="DECIMAL" />
+    <result column="VU_USER_ID" property="vuUserId" jdbcType="DECIMAL" />
+    <result column="VS_ID" property="vsId" jdbcType="DECIMAL" />
+    <result column="VO_ID" property="voId" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    VI_ID, VU_USER_ID, VS_ID, VO_ID
+  </sql>
+
+  <select id="selectVoteNumByVsId" resultType="java.lang.Integer" parameterType="java.lang.Long">
+  	select count(1) from (select * from vote_item where VS_ID = #{vsId,jdbcType=DECIMAL})
+  </select>
+  <select id="selectVoteNumByVsId2" resultType="java.lang.Integer" parameterType="java.lang.Long">
+  	select count(1) from (select count(1) from (select * from vote_item where VS_ID = #{vsId,jdbcType=DECIMAL}) group by vu_user_id)
+  </select>
+  <insert id="insertItem" parameterType="com.entity.Vote_item" >
+    insert into VOTE.VOTE_ITEM (VI_ID, VU_USER_ID, VS_ID, 
+      VO_ID)
+    values (vote_item_seq.nextval, #{vuUserId,jdbcType=DECIMAL}, #{vsId,jdbcType=DECIMAL}, 
+      #{voId,jdbcType=DECIMAL})
+  </insert>
+ <!--  <insert id="insertItem" parameterType="com.entity.Vote_item" >
+  <selectKey keyProperty="voId" resultType="long" order="BEFORE">
+    	select vote_item_seq.nextval from dual
+ 	</selectKey>
+    insert into VOTE.VOTE_ITEM (VI_ID, VU_USER_ID, VS_ID, 
+      VO_ID)
+    values (#{viId,jdbcType=DECIMAL}, #{vuUserId,jdbcType=DECIMAL}, #{vsId,jdbcType=DECIMAL}, 
+      #{voId,jdbcType=DECIMAL})
+  </insert> -->
+  <select id="selectOptionNumByVoId" resultType="java.lang.Integer" parameterType="java.lang.Long">
+  	select count(1) from vote_item where VO_ID = #{voId,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByVoId" parameterType="java.lang.Long" >
+    delete from VOTE.VOTE_ITEM
+    where VO_ID = #{voId,jdbcType=DECIMAL}
+  </delete>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from VOTE.VOTE_ITEM
+    where VI_ID = #{viId,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from VOTE.VOTE_ITEM
+    where VI_ID = #{viId,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.entity.Vote_item" >
+    insert into VOTE.VOTE_ITEM (VI_ID, VU_USER_ID, VS_ID, 
+      VO_ID)
+    values (#{viId,jdbcType=DECIMAL}, #{vuUserId,jdbcType=DECIMAL}, #{vsId,jdbcType=DECIMAL}, 
+      #{voId,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.entity.Vote_item" >
+    insert into VOTE.VOTE_ITEM
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="viId != null" >
+        VI_ID,
+      </if>
+      <if test="vuUserId != null" >
+        VU_USER_ID,
+      </if>
+      <if test="vsId != null" >
+        VS_ID,
+      </if>
+      <if test="voId != null" >
+        VO_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="viId != null" >
+        #{viId,jdbcType=DECIMAL},
+      </if>
+      <if test="vuUserId != null" >
+        #{vuUserId,jdbcType=DECIMAL},
+      </if>
+      <if test="vsId != null" >
+        #{vsId,jdbcType=DECIMAL},
+      </if>
+      <if test="voId != null" >
+        #{voId,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.entity.Vote_item" >
+    update VOTE.VOTE_ITEM
+    <set >
+      <if test="vuUserId != null" >
+        VU_USER_ID = #{vuUserId,jdbcType=DECIMAL},
+      </if>
+      <if test="vsId != null" >
+        VS_ID = #{vsId,jdbcType=DECIMAL},
+      </if>
+      <if test="voId != null" >
+        VO_ID = #{voId,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where VI_ID = #{viId,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.entity.Vote_item" >
+    update VOTE.VOTE_ITEM
+    set VU_USER_ID = #{vuUserId,jdbcType=DECIMAL},
+      VS_ID = #{vsId,jdbcType=DECIMAL},
+      VO_ID = #{voId,jdbcType=DECIMAL}
+    where VI_ID = #{viId,jdbcType=DECIMAL}
+  </update>
+</mapper>

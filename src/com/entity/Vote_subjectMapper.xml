@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.entity.Vote_subjectMapper" >
+  <resultMap id="BaseResultMap" type="com.entity.Vote_subject" >
+    <id column="VS_ID" property="vsId" jdbcType="DECIMAL" />
+    <result column="VS_TITLE" property="vsTitle" jdbcType="VARCHAR" />
+    <result column="VS_TYPE" property="vsType" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    VS_ID, VS_TITLE, VS_TYPE
+  </sql>
+
+<select id="selectAll" resultMap="BaseResultMap">
+	select * from vote_subject
+</select>
+<!-- 模糊查询标题 -->
+<select id="selectByVsTitle" resultMap="BaseResultMap" parameterType="java.lang.String">
+	select * from vote_subject where VS_TITLE like '%${value}%'
+</select>
+ <insert id="insertVote_subject" parameterType="com.entity.Vote_subject" >
+ 	<selectKey keyProperty="vsId" resultType="long" order="BEFORE">
+    	select vote_subject_seq.nextval from dual
+ 	</selectKey>
+    insert into VOTE.VOTE_SUBJECT(VS_ID, VS_TITLE, VS_TYPE)  values(#{vsId,jdbcType=DECIMAL}, #{vsTitle,jdbcType=VARCHAR}, #{vsType,jdbcType=DECIMAL})
+  </insert>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from VOTE.VOTE_SUBJECT
+    where VS_ID = #{vsId,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from VOTE.VOTE_SUBJECT
+    where VS_ID = #{vsId,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.entity.Vote_subject" >
+    insert into VOTE.VOTE_SUBJECT (VS_ID, VS_TITLE, VS_TYPE
+      )
+    values (#{vsId,jdbcType=DECIMAL}, #{vsTitle,jdbcType=VARCHAR}, #{vsType,jdbcType=DECIMAL}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.entity.Vote_subject" >
+    insert into VOTE.VOTE_SUBJECT
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="vsId != null" >
+        VS_ID,
+      </if>
+      <if test="vsTitle != null" >
+        VS_TITLE,
+      </if>
+      <if test="vsType != null" >
+        VS_TYPE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="vsId != null" >
+        #{vsId,jdbcType=DECIMAL},
+      </if>
+      <if test="vsTitle != null" >
+        #{vsTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="vsType != null" >
+        #{vsType,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.entity.Vote_subject" >
+    update VOTE.VOTE_SUBJECT
+    <set >
+      <if test="vsTitle != null" >
+        VS_TITLE = #{vsTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="vsType != null" >
+        VS_TYPE = #{vsType,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where VS_ID = #{vsId,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.entity.Vote_subject" >
+    update VOTE.VOTE_SUBJECT
+    set VS_TITLE = #{vsTitle,jdbcType=VARCHAR},
+      VS_TYPE = #{vsType,jdbcType=DECIMAL}
+    where VS_ID = #{vsId,jdbcType=DECIMAL}
+  </update>
+</mapper>

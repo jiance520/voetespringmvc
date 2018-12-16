@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.entity.Vote_userMapper" >
+  <resultMap id="BaseResultMap" type="com.entity.Vote_user" >
+    <id column="VU_USER_ID" property="vuUserId" jdbcType="DECIMAL" />
+    <result column="VU_USER_NAME" property="vuUserName" jdbcType="VARCHAR" />
+    <result column="VU_PASSWORD" property="vuPassword" jdbcType="VARCHAR" />
+    <result column="VU_STATUS" property="vuStatus" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    VU_USER_ID, VU_USER_NAME, VU_PASSWORD, VU_STATUS
+  </sql>
+
+   <!-- 登陆验证 -->
+  <select id="selectLogin" resultMap="BaseResultMap" parameterType="java.util.Map">
+  	select * from vote_user where VU_USER_NAME = #{vuUserName,jdbcType=VARCHAR} and VU_PASSWORD = #{vuPassword,jdbcType=VARCHAR}
+  </select>
+    <!-- 验证用户是否存在，存在不注册 -->
+  <select id="selectByUserName" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select * from vote_user where VU_USER_NAME = #{vuUserName,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from VOTE.VOTE_USER
+    where VU_USER_ID = #{vuUserId,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from VOTE.VOTE_USER
+    where VU_USER_ID = #{vuUserId,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.entity.Vote_user" >
+    insert into VOTE.VOTE_USER (VU_USER_ID, VU_USER_NAME, VU_PASSWORD, 
+      VU_STATUS)
+    values (#{vuUserId,jdbcType=DECIMAL}, #{vuUserName,jdbcType=VARCHAR}, #{vuPassword,jdbcType=VARCHAR}, 
+      #{vuStatus,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.entity.Vote_user" >
+    insert into VOTE.VOTE_USER
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="vuUserId != null" >
+        VU_USER_ID,
+      </if>
+      <if test="vuUserName != null" >
+        VU_USER_NAME,
+      </if>
+      <if test="vuPassword != null" >
+        VU_PASSWORD,
+      </if>
+      <if test="vuStatus != null" >
+        VU_STATUS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="vuUserId != null" >
+        #{vuUserId,jdbcType=DECIMAL},
+      </if>
+      <if test="vuUserName != null" >
+        #{vuUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="vuPassword != null" >
+        #{vuPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="vuStatus != null" >
+        #{vuStatus,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.entity.Vote_user" >
+    update VOTE.VOTE_USER
+    <set >
+      <if test="vuUserName != null" >
+        VU_USER_NAME = #{vuUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="vuPassword != null" >
+        VU_PASSWORD = #{vuPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="vuStatus != null" >
+        VU_STATUS = #{vuStatus,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where VU_USER_ID = #{vuUserId,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.entity.Vote_user" >
+    update VOTE.VOTE_USER
+    set VU_USER_NAME = #{vuUserName,jdbcType=VARCHAR},
+      VU_PASSWORD = #{vuPassword,jdbcType=VARCHAR},
+      VU_STATUS = #{vuStatus,jdbcType=DECIMAL}
+    where VU_USER_ID = #{vuUserId,jdbcType=DECIMAL}
+  </update>
+</mapper>

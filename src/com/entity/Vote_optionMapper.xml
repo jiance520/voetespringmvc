@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.entity.Vote_optionMapper" >
+  <resultMap id="BaseResultMap" type="com.entity.Vote_option" >
+    <id column="VO_ID" property="voId" jdbcType="DECIMAL" />
+    <result column="VS_ID" property="vsId" jdbcType="DECIMAL" />
+    <result column="VO_OPTION" property="voOption" jdbcType="VARCHAR" />
+    <result column="VO_ORDER" property="voOrder" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    VO_ID, VS_ID, VO_OPTION, VO_ORDER
+  </sql>
+
+ <select id="selectOptionNumByVsId" resultType="java.lang.Integer" parameterType="java.lang.Long">
+ 	select count(1) from vote_option where VS_ID = #{vsId,jdbcType=DECIMAL}
+  </select>
+<select id="selectOptionsByVsId" resultMap="BaseResultMap" parameterType="java.lang.Long">
+  	select * from vote_option where VS_ID = #{vsId,jdbcType=DECIMAL} order by VO_ORDER
+</select>
+  <insert id="insertVote_option" parameterType="com.entity.Vote_option" >
+  	<selectKey keyProperty="voId" resultType="long" order="BEFORE">
+    	select vote_option_seq.nextval from dual
+ 	</selectKey>
+    insert into VOTE.VOTE_OPTION (VO_ID, VS_ID, VO_OPTION, VO_ORDER)
+    values (vote_option_seq.nextval, #{vsId,jdbcType=DECIMAL}, #{voOption,jdbcType=VARCHAR}, 
+      #{voOrder,jdbcType=DECIMAL})
+  </insert>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from VOTE.VOTE_OPTION
+    where VO_ID = #{voId,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from VOTE.VOTE_OPTION
+    where VO_ID = #{voId,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.entity.Vote_option" >
+    insert into VOTE.VOTE_OPTION (VO_ID, VS_ID, VO_OPTION, 
+      VO_ORDER)
+    values (#{voId,jdbcType=DECIMAL}, #{vsId,jdbcType=DECIMAL}, #{voOption,jdbcType=VARCHAR}, 
+      #{voOrder,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.entity.Vote_option" >
+    insert into VOTE.VOTE_OPTION
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="voId != null" >
+        VO_ID,
+      </if>
+      <if test="vsId != null" >
+        VS_ID,
+      </if>
+      <if test="voOption != null" >
+        VO_OPTION,
+      </if>
+      <if test="voOrder != null" >
+        VO_ORDER,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="voId != null" >
+        #{voId,jdbcType=DECIMAL},
+      </if>
+      <if test="vsId != null" >
+        #{vsId,jdbcType=DECIMAL},
+      </if>
+      <if test="voOption != null" >
+        #{voOption,jdbcType=VARCHAR},
+      </if>
+      <if test="voOrder != null" >
+        #{voOrder,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.entity.Vote_option" >
+    update VOTE.VOTE_OPTION
+    <set >
+      <if test="vsId != null" >
+        VS_ID = #{vsId,jdbcType=DECIMAL},
+      </if>
+      <if test="voOption != null" >
+        VO_OPTION = #{voOption,jdbcType=VARCHAR},
+      </if>
+      <if test="voOrder != null" >
+        VO_ORDER = #{voOrder,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where VO_ID = #{voId,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.entity.Vote_option" >
+    update VOTE.VOTE_OPTION
+    set VS_ID = #{vsId,jdbcType=DECIMAL},
+      VO_OPTION = #{voOption,jdbcType=VARCHAR},
+      VO_ORDER = #{voOrder,jdbcType=DECIMAL}
+    where VO_ID = #{voId,jdbcType=DECIMAL}
+  </update>
+</mapper>

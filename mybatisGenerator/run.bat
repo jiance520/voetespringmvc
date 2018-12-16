@@ -1,0 +1,1 @@
+java -jar E:\workspace\votespringmvc\mybatisGenerator\mybatis-generator-core-1.3.2.jar -configfile E:\workspace\votespringmvc\mybatisGenerator\generator.xml -overwrite
